@@ -16,6 +16,7 @@ public class FogOfWarScript : MonoBehaviour
     Mesh m_mesh;
 
     public List<Vector3> vertices = new List<Vector3>();
+    
     Vector3[] m_vertices; //점
     Color[] m_colors;
     void Start()
@@ -30,6 +31,7 @@ public class FogOfWarScript : MonoBehaviour
     void Update()
     {
         Ray r = new Ray(transform.position, m_player.position - transform.position);
+        Debug.DrawRay(r.origin, r.direction * 10.0f, Color.green, 1f);
         RaycastHit hit;
         if (Physics.Raycast(r, out hit, 1000, m_fogLayer, QueryTriggerInteraction.Collide)) //카메라 레이어가 안개 레이어를 거치면
         {
@@ -37,7 +39,7 @@ public class FogOfWarScript : MonoBehaviour
             {   
                 
                 Vector3 v = m_fogOfWarPlane.transform.TransformPoint(m_vertices[i]); 
-                float dist = Vector3.SqrMagnitude(v - hit.point);
+                float dist = Vector3.SqrMagnitude(v - hit.point); //계산된 거리의 제곱값 계산
                 if (dist < m_radiusSqr)
                 {
                     float alpha = Mathf.Min(m_colors[i].a, dist / m_radiusSqr); //둘 중 최솟값 출력
